@@ -21,8 +21,8 @@ const Register = lazy(() => import("@pages/Register"));
 const Account = lazy(() => import("@pages/Account"));
 const Orders = lazy(() => import("@pages/Orders"));
 import Error from "@pages/Error";
-import ProtectedRoutes from "@components/Auth/ProtectedRoutes";
 // protected route
+import ProtectedRoutes from "@components/Auth/ProtectedRoutes";
 
 const router = createBrowserRouter([
   {
