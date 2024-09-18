@@ -16,6 +16,9 @@ const actGetCategories = createAsyncThunk(
     } catch (error) {
       try {
         const staticData = await import("../../../offline mode/categories.json");
+        alert(
+          "note : you are in offline mode so you cannot use some features like placing order"
+        );
         return staticData.category;
       } catch (error) {
         return rejectWithValue(axiosErrorHandler(error));
