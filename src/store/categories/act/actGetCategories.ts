@@ -8,10 +8,18 @@ const actGetCategories = createAsyncThunk(
   async (_, thunkApi) => {
     const { rejectWithValue ,signal} = thunkApi;
     try {
+      if (!navigator.onLine) {
+        throw new Error("No network connection");
+      }
       const response = await axios.get<TResponse>("/category",{signal});
       return response.data;
     } catch (error) {
-      return rejectWithValue(axiosErrorHandler(error));
+      try {
+        const staticData = await import("../../../offline mode/categories.json");
+        return staticData.category;
+      } catch (error) {
+        return rejectWithValue(axiosErrorHandler(error));
+      }
     }
   }
 );
