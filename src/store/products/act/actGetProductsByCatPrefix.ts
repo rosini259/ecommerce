@@ -6,15 +6,25 @@ type TResponse = TProduct[];
 const actGetProductsByCatPrefix = createAsyncThunk(
   "products/actGetProductsByCatPrefix",
   async (prefix: string, thunkApi) => {
-    const { rejectWithValue,signal } = thunkApi;
+    const { rejectWithValue, signal } = thunkApi;
     try {
+      if (!navigator.onLine) {
+        throw new Error("No network connection");
+      }
       const response = await axios.get<TResponse>(
         `/products?cat_prefix=${prefix}`,
-        {signal}
+        { signal }
       );
       return response.data;
     } catch (error) {
-      return rejectWithValue(axiosErrorHandler(error));
+      try {
+        const staticData = await import(
+          "../../../offline mode/products.json"
+        );
+        return staticData.products;
+      } catch (error) {
+        return rejectWithValue(axiosErrorHandler(error));
+      }
     }
   }
 );
