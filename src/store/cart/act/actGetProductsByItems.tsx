@@ -13,13 +13,23 @@ const actGetProductsByItems = createAsyncThunk(
     const concatenatedItemId = itemId.map((el) => `id=${el}`).join("&");
     if (!itemId.length) return fulfillWithValue([]);
     try {
+      if (!navigator.onLine) {
+        throw new Error("No network connection");
+      }
       const responce = await axios.get<TResponse>(
         `/products?${concatenatedItemId}`,
         { signal }
       );
       return responce.data;
     } catch (error) {
-      return rejectWithValue(axiosErrorHandler(error));
+      try {
+        const staticData = await import(
+          "../../../offline mode/categories.json"
+        );
+        return staticData.category;
+      } catch (error) {
+        return rejectWithValue(axiosErrorHandler(error));
+      }
     }
   }
 );
