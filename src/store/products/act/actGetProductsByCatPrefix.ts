@@ -8,9 +8,6 @@ const actGetProductsByCatPrefix = createAsyncThunk(
   async (prefix: string, thunkApi) => {
     const { rejectWithValue, signal } = thunkApi;
     try {
-      if (!navigator.onLine) {
-        throw new Error("No network connection");
-      }
       const response = await axios.get<TResponse>(
         `/products?cat_prefix=${prefix}`,
         { signal }

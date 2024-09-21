@@ -13,9 +13,6 @@ const actGetProductsByItems = createAsyncThunk(
     const concatenatedItemId = itemId.map((el) => `id=${el}`).join("&");
     if (!itemId.length) return fulfillWithValue([]);
     try {
-      if (!navigator.onLine) {
-        throw new Error("No network connection");
-      }
       const responce = await axios.get<TResponse>(
         `/products?${concatenatedItemId}`,
         { signal }
